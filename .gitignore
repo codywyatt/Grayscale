@@ -1,2 +1,4 @@
 /target
 **/*.rs.bk
+src/out/lorem_ipsum.txt
+test.txt
