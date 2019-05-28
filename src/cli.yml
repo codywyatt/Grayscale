@@ -14,3 +14,17 @@ args:
         help: Sets the input file to use
         required: true
         index: 1
+        
+    - OUTPUT:
+        help: Sets the file to output to. Different image format can be used.
+        required: true
+        index: 2
+        
+    - weights:
+        short: w
+        help: Sets the weights for the grayscale on the pixels
+        number_of_values: 3
+        value_names:
+            - Red
+            - Green
+            - Blue

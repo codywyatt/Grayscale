@@ -8,6 +8,9 @@ use clap::App;
 fn main() {
     let yaml = load_yaml!("cli.yml");
     let matches = App::from_yaml(yaml).get_matches();
+
+    let weights: Vec<&str> = matches.values_of("weights").unwrap().collect();
+    println!("Weights:: R:{},G:{},B:{}", weights[0], weights[1], weights[2]);
     
     // Use the open function to load an image from a Path.
     // ```open``` returns a `DynamicImage` on success.
