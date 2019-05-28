@@ -1,15 +1,17 @@
+#[macro_use]
+extern crate clap;
 extern crate image;
 
 use image::GenericImageView;
-use std::env;
+use clap::App;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let file = &args[1];
+    let yaml = load_yaml!("cli.yml");
+    let matches = App::from_yaml(yaml).get_matches();
     
     // Use the open function to load an image from a Path.
     // ```open``` returns a `DynamicImage` on success.
-    let img = image::open(file).unwrap();
+    let img = image::open(matches.value_of("INPUT").unwrap()).unwrap();
 
     // The dimensions method returns the images width and height.
     println!("dimensions {:?}", img.dimensions());
