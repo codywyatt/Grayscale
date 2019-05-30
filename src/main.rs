@@ -65,7 +65,7 @@ fn main() {
     //
     let gray = img.grayscale();
     
-    let pixelg = gray.get_pixel(500,500);
+    let pixelg = gray.get_pixel(0,0);
     let datag = pixelg.data;
     println!("rgb({:?},{:?},{:?})", datag[0],datag[1],datag[2]);
     //
