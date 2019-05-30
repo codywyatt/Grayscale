@@ -42,7 +42,7 @@ fn main() {
     //Tests below
     
     //Get the pixel at location x, y
-    let pixel = img.get_pixel(500,500);
+    let pixel = img.get_pixel(0,0);
     //Get the data in the pixel, which will be the color for each channel
     let data = pixel.data;
     //Print out the color codes for each
