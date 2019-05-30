@@ -1,3 +1,4 @@
+//Macro_use only used for the matches from yaml(App::from_yaml) Recommend not to use other macros
 #[macro_use]
 extern crate clap;
 extern crate image;
