@@ -16,13 +16,10 @@ Info/Help:
 	-h help enabled by Clap
 ```
 
-# Author
+# Authors
 
-Cody Wyatt
-
-Cwyatt@pdx.edu
+* ** Cody Wyatt** - *Initial work* - <Cwyatt@pdx.edu>
 
 # License
 
-This work is released under the "MIT License". Please see
-the file `LICENSE` in this distribution for license terms.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
