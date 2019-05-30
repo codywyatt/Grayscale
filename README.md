@@ -18,7 +18,7 @@ Info/Help:
 
 # Authors
 
-* ** Cody Wyatt** - *Initial work* - <Cwyatt@pdx.edu>
+* **Cody Wyatt** - *Initial work* - <Cwyatt@pdx.edu>
 
 # License
 
