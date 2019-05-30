@@ -1,4 +1,6 @@
 /target
 **/*.rs.bk
 src/out/lorem_ipsum.txt
+src/main.exe
+src/main.pdb
 test.txt
