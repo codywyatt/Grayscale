@@ -22,6 +22,7 @@ args:
         
     - weights:
         short: w
+        long: weights
         help: Sets the weights for the grayscale on the pixels between [0..1]
         number_of_values: 3
         value_names:
