@@ -4,9 +4,12 @@ extern crate clap;
 extern crate image;
 extern crate rand;
 
-use image::GenericImageView;
+use image::{GenericImage,GenericImageView};
 use clap::App;
 use rand::Rng;
+
+
+
 
 
 fn main() {
@@ -43,8 +46,6 @@ fn main() {
     let (width, height) = img.dimensions();
     println!("dimensions({:?}, {:?})", width, height);
 
-    // Write the contents of this image to the Writer in selected format.
-
     //Will Replace With custom Grayscale functions with command line interface commands
         //Will totally rework grayscale to be custom options
             //Things like Custom values for each color ***Implimented***
@@ -61,6 +62,7 @@ fn main() {
     
     //Get the pixel at location x, y
     let pixel = img.get_pixel(testx,testy);
+    
     //Get the data in the pixel, which will be the color for each channel
     let data = pixel.data;
     //Print out the color codes for each
@@ -82,9 +84,23 @@ fn main() {
     //Grayscale with image values using provided weights
     println!("rgb({:?},{:?},{:?})", average, average, average);
     //
+    for x in 0..width {
+        for y in 0..height {
+            let pixel = img.get_pixel(x, y);
+            let graypixel = (f32weights[0] * pixel[0] as f32 +
+                          f32weights[1] * pixel[1] as f32 +
+                          f32weights[2] * pixel[2] as f32) as u8
+                          ;
+            img.put_pixel(x,y, image::Rgba([graypixel, graypixel, graypixel, 255]));
+        }
+    }
+
+    let testdata = img.get_pixel(0,0).data;
+    println!("Test Data{:?})", testdata);
+
     
-    //let gray = graypixels(img, f32weights[0],f32weights[1],f32weights[2]);
-    let gray = img.grayscale();
+    //graypixels(&img, f32weights[0],f32weights[1],f32weights[2]);
+    let gray = img;
     
     let pixelg = gray.get_pixel(testx,testy);
     let datag = pixelg.data;
