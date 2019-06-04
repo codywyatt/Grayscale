@@ -6,6 +6,7 @@ extern crate rand;
 
 use image::{GenericImage,GenericImageView};
 use clap::App;
+#[allow(unused_imports)]
 use rand::Rng;
 
 
@@ -32,19 +33,19 @@ fn main() {
     let f32weights = f32weights.unwrap();  
     
     //Print the weights being used for the grayscale
-    println!("Weights R:{:?}, G:{:?}, B:{:?}",
-        f32weights[0], 
-        f32weights[1], 
-        f32weights[2]);
-        
+    if matches.is_present("weights"){
+        println!("Custom Weights R:{:?}, G:{:?}, B:{:?}",
+            f32weights[0], 
+            f32weights[1], 
+            f32weights[2]);
+        }
     // Use the open function to load an image from a Path.
     // ```open``` returns a `DynamicImage` on success.
     let mut img = image::open(matches.value_of("INPUT").unwrap()).unwrap();
 
     // The dimensions method returns the images width and height.
-    // Could use later for other image uses.
     let (width, height) = img.dimensions();
-    println!("dimensions({:?}, {:?})", width, height);
+    //println!("dimensions({:?}, {:?})", width, height);
 
     //Will Replace With custom Grayscale functions with command line interface commands
         //Will totally rework grayscale to be custom options
@@ -54,7 +55,7 @@ fn main() {
                 //Allow for that percent to be changed for all or each color
     //Start of going through and checking pixels
     //Tests below
-    
+    /*
     let mut rng = rand::thread_rng();
     let testx = rng.gen_range(0, img.width());
     let testy = rng.gen_range(0, img.height());
@@ -69,8 +70,8 @@ fn main() {
     
     //      https://www.w3schools.com/colors/colors_picker.asp
     // Use link if you want to see the colors without trying to use other code
+    println!("Value before grayscale");
     println!("rgb({:?},{:?},{:?})", data[0],data[1],data[2]);
-    println!("Value after grayscale below");
     
     //Color space defined in terms of the CIE 1931 linear luminance Y-linear
     //      (Just took the weights found online for grayscale)
@@ -80,10 +81,14 @@ fn main() {
                   f32weights[1] * data[1] as f32 +
                   f32weights[2] * data[2] as f32) as u8
                   ;
-                  
+    
     //Grayscale with image values using provided weights
+
+    println!("Value after grayscale");
     println!("rgb({:?},{:?},{:?})", average, average, average);
-    //
+    */
+    
+    //Custom Grayscale code!
     for x in 0..width {
         for y in 0..height {
             let pixel = img.get_pixel(x, y);
@@ -94,20 +99,15 @@ fn main() {
             img.put_pixel(x,y, image::Rgba([graypixel, graypixel, graypixel, 255]));
         }
     }
-
-    let testdata = img.get_pixel(0,0).data;
-    println!("Test Data{:?})", testdata);
-
     
     //graypixels(&img, f32weights[0],f32weights[1],f32weights[2]);
-    let gray = img;
-    
-    let pixelg = gray.get_pixel(testx,testy);
+    /*
+    let pixelg = img.get_pixel(testx,testy);
     let datag = pixelg.data;
     println!("rgb({:?},{:?},{:?})", datag[0],datag[1],datag[2]);
     //
     println!("The Above two will be the same if using default weights");
-    
+    */
    
-    gray.save(matches.value_of("OUTPUT").unwrap()).unwrap();
+    img.save(matches.value_of("OUTPUT").unwrap()).unwrap();
 }
