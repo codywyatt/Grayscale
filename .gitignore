@@ -1,7 +1,7 @@
 /target
 **/*.rs.bk
-*.jpg
-*.png
+/*.jpg
+/*.png
 src/out/lorem_ipsum.txt
 src/main.exe
 src/main.pdb
