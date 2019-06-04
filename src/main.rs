@@ -2,9 +2,12 @@
 #[macro_use]
 extern crate clap;
 extern crate image;
+extern crate rand;
 
 use image::GenericImageView;
 use clap::App;
+use rand::Rng;
+
 
 fn main() {
     //Load the Clap yml file for commands
@@ -19,17 +22,26 @@ fn main() {
         {matches.values_of("weights").unwrap().collect()} 
         //Or Default for grayscale
         else{vec!["0.2126", "0.7152", "0.0722"]};
-
+     
+     
+    let f32weights: Result<Vec<f32>, _> =
+    weights.iter().map(|x| x.parse()).collect();
+    let f32weights = f32weights.unwrap();  
+    
     //Print the weights being used for the grayscale
-    println!("Weights:: R:{},G:{},B:{}", weights[0], weights[1], weights[2]);
+    println!("Weights R:{:?}, G:{:?}, B:{:?}",
+        f32weights[0], 
+        f32weights[1], 
+        f32weights[2]);
         
     // Use the open function to load an image from a Path.
     // ```open``` returns a `DynamicImage` on success.
-    let img = image::open(matches.value_of("INPUT").unwrap()).unwrap();
+    let mut img = image::open(matches.value_of("INPUT").unwrap()).unwrap();
 
     // The dimensions method returns the images width and height.
     // Could use later for other image uses.
-    println!("dimensions {:?}", img.dimensions());
+    let (width, height) = img.dimensions();
+    println!("dimensions({:?}, {:?})", width, height);
 
     // Write the contents of this image to the Writer in selected format.
 
@@ -42,8 +54,13 @@ fn main() {
     //Start of going through and checking pixels
     //Tests below
     
+    let mut rng = rand::thread_rng();
+    let testx = rng.gen_range(0, img.width());
+    let testy = rng.gen_range(0, img.height());
+    println!("Random Pixel ({:?}, {:?})", testx, testy);
+    
     //Get the pixel at location x, y
-    let pixel = img.get_pixel(0,0);
+    let pixel = img.get_pixel(testx,testy);
     //Get the data in the pixel, which will be the color for each channel
     let data = pixel.data;
     //Print out the color codes for each
@@ -56,22 +73,25 @@ fn main() {
     //Color space defined in terms of the CIE 1931 linear luminance Y-linear
     //      (Just took the weights found online for grayscale)
     //Average in this case is actually using the default values unless weights are specified
-    let average = (0.2126f32 * data[0] as f32 +
-                  0.7152f32 * data[1] as f32 +
-                  0.0722f32 * data[2] as f32) as u8
+    
+    let average = (f32weights[0] * data[0] as f32 +
+                  f32weights[1] * data[1] as f32 +
+                  f32weights[2] * data[2] as f32) as u8
                   ;
                   
     //Grayscale with image values using provided weights
     println!("rgb({:?},{:?},{:?})", average, average, average);
     //
+    
+    //let gray = graypixels(img, f32weights[0],f32weights[1],f32weights[2]);
     let gray = img.grayscale();
     
-    let pixelg = gray.get_pixel(0,0);
+    let pixelg = gray.get_pixel(testx,testy);
     let datag = pixelg.data;
     println!("rgb({:?},{:?},{:?})", datag[0],datag[1],datag[2]);
     //
-    println!("The Above two should be the exact same always");
+    println!("The Above two will be the same if using default weights");
     
    
-    gray.save("out.png").unwrap();
+    gray.save(matches.value_of("OUTPUT").unwrap()).unwrap();
 }

@@ -7,3 +7,4 @@ edition = "2018"
 [dependencies]
 clap = { version = "*", features = ["yaml"] }
 image = "*"
+rand = "0.6"
