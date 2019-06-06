@@ -8,12 +8,9 @@ use image::{GenericImage,GenericImageView};
 use clap::App;
 
 //Rand Used for Testing only
-//#[allow(unused_imports)]
-//use rand::Rng;
-
-
-
-
+/*
+  use rand::Rng;
+*/
 
 fn main() {
     //Load the Clap yml file for commands
@@ -55,28 +52,24 @@ fn main() {
 
     // The dimensions method returns the images width and height.
     let (width, height) = img.dimensions();
-    //Prints the dimensions of the Image for checking for size error
-    //```
-    //println!("dimensions({:?}, {:?})", width, height);
-    //```
-
+    
     
     //Tests below
-    //```
+    /*
+    //Prints the dimensions of the Image for checking for size error
+    println!("dimensions({:?}, {:?})", width, height);
+    
     //Random Number Generator for random pixel picking
-    //let mut rng = rand::thread_rng();
+    let mut rng = rand::thread_rng();
     
     //Pick a Random pixel in the image (testx, testy) (x,y)
-    //let testx = rng.gen_range(0, img.width());
-    //let testy = rng.gen_range(0, img.height());
-    //let testy = rng.gen_range(0, img.height());
+    let testx = rng.gen_range(0, img.width());
+    let testy = rng.gen_range(0, img.height());
     //Prints the coordinates to see which is being tested
-    //println!("Random Pixel ({:?}, {:?})", testx, testy);
+    println!("Random Pixel ({:?}, {:?})", testx, testy);
     
     //Get the pixel at location x, y to get data to check grayscale function
-
-    //let pixel = img.get_pixel(testx,testy);
-    //```
+    let pixel = img.get_pixel(testx,testy);
     
     //Get the data in the pixel, which will be the color for each channel
     //  Only need this if you dont want to write pixel.data[0] and instead write data[0]
@@ -88,10 +81,8 @@ fn main() {
     //      https://www.w3schools.com/colors/colors_picker.asp
     // Use link if you want to see the colors without trying to use other code
 
-    //```
-    //println!("Value before grayscale");
-    //println!("rgb({:?},{:?},{:?})", pixel.data[0],pixel.data[1],pixel.data[2]);
-    //```
+    println!("Value before grayscale");
+    println!("rgb({:?},{:?},{:?})", pixel.data[0],pixel.data[1],pixel.data[2]);
     
     //Color space defined in terms of the CIE 1931 linear luminance Y-linear
     //      (Just took the weights found online for grayscale)
@@ -99,18 +90,18 @@ fn main() {
     //  average is just the weights for each color times by the same color all added together
     //      The use case is using percentages for weights.
     //      Can add check in f32weights conversion if instead of weights a value from 0 to 255 is passed and divid the passed value by 255 for a percent
-    //```
-    //let average = (f32weights[0] * pixel.data[0] as f32 +
-    //              f32weights[1] * pixel.data[1] as f32 +
-    //              f32weights[2] * pixel.data[2] as f32) as u8
-    //              ;
-    //```
-    
-    
-    //Grayscale with image values using provided weights
-    //println!("Value after grayscale");
-    //println!("rgb({:?},{:?},{:?})", average, average, average);
 
+    let average = (f32weights[0] * pixel.data[0] as f32 +
+                  f32weights[1] * pixel.data[1] as f32 +
+                  f32weights[2] * pixel.data[2] as f32) as u8
+                  ;
+
+    //Grayscale with image values using provided weights
+    println!("Value after grayscale");
+    println!("rgb({:?},{:?},{:?})", average, average, average);
+    */
+    
+    
     
     //Custom Grayscale code
     // Go through every pixel and do function
@@ -137,11 +128,11 @@ fn main() {
         }
     }
 
-    //```
-    //let pixelg = img.get_pixel(testx,testy);
-    //println!("rgb({:?},{:?},{:?})", pixelg.data[0],pixelg.data[1],pixelg.data[2]);
-    //println!("The Above two will be the same if using default weights");
-    //```
+    /*
+    let pixelg = img.get_pixel(testx,testy);
+    println!("rgb({:?},{:?},{:?})", pixelg.data[0],pixelg.data[1],pixelg.data[2]);
+    println!("The Above two will be the same if using default weights");
+    */
     
    
     img.save(matches.value_of("OUTPUT").unwrap()).unwrap();
