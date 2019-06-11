@@ -8,9 +8,9 @@ use image::{GenericImage,GenericImageView};
 use clap::App;
 
 //Rand Used for Testing only
-/*
-  use rand::Rng;
-*/
+
+//  use rand::Rng;
+
 
 fn main() {
     //Load the Clap yml file for commands
@@ -55,7 +55,7 @@ fn main() {
     
     
     //Tests below
-    /*
+/*
     //Prints the dimensions of the Image for checking for size error
     println!("dimensions({:?}, {:?})", width, height);
     
@@ -70,6 +70,7 @@ fn main() {
     
     //Get the pixel at location x, y to get data to check grayscale function
     let pixel = img.get_pixel(testx,testy);
+    
     
     //Get the data in the pixel, which will be the color for each channel
     //  Only need this if you dont want to write pixel.data[0] and instead write data[0]
@@ -99,35 +100,113 @@ fn main() {
     //Grayscale with image values using provided weights
     println!("Value after grayscale");
     println!("rgb({:?},{:?},{:?})", average, average, average);
+*/
+    
+        
+        //Start of code that will take in a colorsplash and use the values to check the pixels
+        //  Allows for multiple times used and converts each value to a float to be used
+        //  
+        //  Need to put in the grayscale function starting at "let splashlen"
+        let colorsplash: Vec<_> = matches.values_of("colorsplash").unwrap().collect();
+        let splash: Result<Vec<f32>, _> =
+        colorsplash.iter().map(|x| x.parse()).collect();
+        let splash = splash.unwrap();
+        let splashlen = splash.len()/4;
+        
+        /* For Testing Splash
+        for s in 0..splashlen {
+            println!("Red Splash: {:?}-{:?}",(splash[s*4] - splash[s*4+3]*255.0), (splash[s*4] + splash[s*4+3]*255.0));
+            println!("Green Splash: {:?}-{:?}",(splash[s*4+1] - splash[s*4+3]*255.0), (splash[s*4+1] + splash[s*4+3]*255.0));
+            println!("Blue Splash: {:?}-{:?}",(splash[s*4+2] - splash[s*4+3]*255.0), (splash[s*4+2] + splash[s*4+3]*255.0));
+            //println!("Splash List {}: {:?} {:?} {:?} {:?}", s , splash[s*4], splash[s*4+1], splash[s*4+2], splash[s*4+3]));
+            
+                let pixel = img.get_pixel(590,370);
+                
+                if pixel[0] > (splash[s*4] - splash[s*4+3]*255.0) as u8 && pixel[0] < (splash[s*4] + splash[s*4+3]*255.0) as u8 &&
+                pixel[1] > (splash[s*4+1] - splash[s*4+3]*255.0) as u8 && pixel[1] < (splash[s*4+1] + splash[s*4+3]*255.0) as u8 &&
+                pixel[2] > (splash[s*4+2] - splash[s*4+3]*255.0) as u8 && pixel[2] < (splash[s*4+2] + splash[s*4+3]*255.0) as u8
+                {
+                    println!("Passed Test")
+                }
+                else {
+                    println!("Red Test: {:?} in range of {:?} to {:?}",pixel[0],(splash[s*4] - splash[s*4+3]*255.0) as u8, (splash[s*4] + splash[s*4+3]*255.0) as u8);
+                    println!(":{:?}", pixel[0]as u16 > (splash[s*4] - splash[s*4+3]*255.0));
+                    println!("red({:?})", pixel[0]);
+                    //println!(":{:?}", pixel[0] > (splash[s*4] + splash[s*4+3]*255.0) as u8);
+                    println!(":{:?} {:?}", pixel[0], (splash[s*4] + splash[s*4+3]*255.0) as u8);
+                    println!("Splash Red: {:?} Using % {:?} With multiplying by 255 gets {:?}", splash[s*4],splash[s*4+3], (splash[s*4+3]*255.0) as u8);
+                    //println!("Green Test: {:?} in range of {:?}to{:?}",pixel[1],(splash[s*4+1] - splash[s*4+3]*255.0), (splash[s*4+1] + splash[s*4+3]*255.0));
+                    //println!("Blue Test: {:?} in range of {:?}to{:?}",pixel[2],(splash[s*4+2] - splash[s*4+3]*255.0), (splash[s*4+2] + splash[s*4+3]*255.0));
+                    
+                }
+        }
     */
-    
-    
+
     
     //Custom Grayscale code
     // Go through every pixel and do function
-    for x in 0..width {
-        for y in 0..height {
-            //First Get the pixel at x,y which will start from 0 and go to the end of the image
-            let pixel = img.get_pixel(x, y);
-            //Find the value we want to set each pixel to that will make the pixel grayscale
-            //graypixel in this case is actually using the default values unless weights are specified. Default values are done in conversion
-            //  graypixel is just the weights for each color times by the same color all added together
-            //      graypixel = Red Weight  *  Pixel's Red +
-            //                  Green Weight  *  Pixel's Green +
-            //                  Blue Weight  *  Pixel's Blue
-            //          This can give strange results since you could specify weights that sum to more than 1 which would oversaturate the image
-            //      The use case is using percentages for weights.
-            //      
-            let graypixel = (f32weights[0] * pixel[0] as f32 +
-                          f32weights[1] * pixel[1] as f32 +
-                          f32weights[2] * pixel[2] as f32) as u8
-                          ;
-            //Take the graypixel color code using this function and set the colors for each pixel to be that value
-            //  Setting all values to the same value means that the color can only be a shade of gray as is how colors work
-            img.put_pixel(x,y, image::Rgba([graypixel, graypixel, graypixel, 255]));
+    if matches.is_present("colorsplash"){
+        //println!("ColorSplash Enabled");
+        for x in 0..width {
+            'pixel: for y in 0..height {
+                //First Get the pixel at x,y which will start from 0 and go to the end of the image
+                let pixel = img.get_pixel(x, y);
+                //Find the value we want to set each pixel to that will make the pixel grayscale
+                //graypixel in this case is actually using the default values unless weights are specified. Default values are done in conversion
+                //  graypixel is just the weights for each color times by the same color all added together
+                //      graypixel = Red Weight  *  Pixel's Red +
+                //                  Green Weight  *  Pixel's Green +
+                //                  Blue Weight  *  Pixel's Blue
+                //          This can give strange results since you could specify weights that sum to more than 1 which would oversaturate the image
+                //      The use case is using percentages for weights.
+                //
+                
+                
+                //Need an If else statement to see if a colorsplash was given. If so leave that color and continue
+                /*
+                  if let Some(in_v) = matches.values_of("colorsplash") {
+                    for in_splash in in_v {
+                        println!("Color Splash: {}", in_splash);
+                    }
+                  }
+                */
+                
+                for s in 0..splashlen {
+                    //Check each value
+                    if (pixel[0] as f32) > (splash[s*4] - splash[s*4+3]*255.0) && (pixel[0] as f32) < (splash[s*4] + splash[s*4+3]*255.0) &&
+                        (pixel[1] as f32) > (splash[s*4+1] - splash[s*4+3]*255.0) && (pixel[1] as f32) < (splash[s*4+1] + splash[s*4+3]*255.0) &&
+                        (pixel[2] as f32) > (splash[s*4+2] - splash[s*4+3]*255.0) && (pixel[2] as f32) < (splash[s*4+2] + splash[s*4+3]*255.0)
+                        {
+                            img.put_pixel(x,y, image::Rgba([pixel[0], pixel[1], pixel[2], 255]));
+                        }
+                    //println!("Splash List {}: {:?} {:?} {:?} {:?}", s , splash[s*4], splash[s*4+1], splash[s*4+2], splash[s*4+3] );
+
+                    else{
+                        let graypixel = (f32weights[0] * pixel[0] as f32 +
+                                      f32weights[1] * pixel[1] as f32 +
+                                      f32weights[2] * pixel[2] as f32) as u8;    
+                        img.put_pixel(x,y, image::Rgba([graypixel, graypixel, graypixel, 255]));
+                    }
+                }                      
+
+
+            }
         }
     }
-
+    
+    else{
+        for x in 0..width {
+            for y in 0..height {
+                let pixel = img.get_pixel(x, y);      
+                let graypixel = (f32weights[0] * pixel[0] as f32 +
+                              f32weights[1] * pixel[1] as f32 +
+                              f32weights[2] * pixel[2] as f32) as u8;           
+                img.put_pixel(x,y, image::Rgba([graypixel, graypixel, graypixel, 255]));
+            }
+        }
+    }
+    
+    
     /*
     let pixelg = img.get_pixel(testx,testy);
     println!("rgb({:?},{:?},{:?})", pixelg.data[0],pixelg.data[1],pixelg.data[2]);

@@ -23,9 +23,22 @@ args:
     - weights:
         short: w
         long: weights
-        help: Sets the weights for the grayscale on the pixels between [0..1]
+        help: Sets the weights for the grayscale on the pixels between [0..1] or [0..255]
         number_of_values: 3
         value_names:
             - Red
             - Green
             - Blue
+
+    - colorsplash:
+        short: c
+        long: colorsplash
+        help: Sets the color you want to leave in the grayscale image between values [0..1] or [0..255]. Range is [0..1] for percent
+        multiple: true
+        number_of_values: 4
+        value_names:
+            - Red
+            - Green
+            - Blue
+            - Range
+            
