@@ -6,3 +6,5 @@ src/out/lorem_ipsum.txt
 src/main.exe
 src/main.pdb
 test.txt
+TestExamples - Release.bat
+grayscale.exe
